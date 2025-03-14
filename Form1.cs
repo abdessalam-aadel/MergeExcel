@@ -137,7 +137,7 @@ namespace MergeExcel
             labelInfo.Text = "Processing ...";
             labelErrorMessage.Text = "";
 
-            string destinationFile = @"C:\Users\P50\Desktop\mergedfile.xlsx";
+            string destinationFile = selected_path + @"\mergedfile.xlsx";
             try
             {
                 MergeExcelFiles(XLSfiles, destinationFile);
