@@ -21,7 +21,7 @@ i have a small issue :
 
 This message showing when the Excel data is copied to the clipboard is likely a result of Excel's internal notification system that pops up when a clipboard operation is performed (e.g., when you copy data).
 
-To suppress these notifications or avoid the clipboard message, just by setting the :
+To suppress these notifications or avoid the clipboard message :
 
 > Application.DisplayAlerts = false; 
 
