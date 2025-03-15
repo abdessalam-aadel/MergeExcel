@@ -20,9 +20,7 @@ namespace MergeExcel
         // Create fileCount to counting number of Excel files found
         int fileCount = 0;
 
-        Excel.Application excelApplication = null;
-        Excel.Workbook excelWorkBook = null;
-        object paramMissing = Type.Missing;
+        Excel.Application excelApp = null;
 
         public frmMain()
         {
@@ -53,7 +51,7 @@ namespace MergeExcel
         public void MergeExcelFiles(string[] filePaths, string destinationFile)
         {
             // Start Excel application
-            Excel.Application excelApp = new Excel.Application();
+            excelApp = new Excel.Application();
             excelApp.Visible = false; // Make Excel invisible during processing
             // Disable display alerts to avoid the clipboard warning message
             excelApp.DisplayAlerts = false;
@@ -106,7 +104,6 @@ namespace MergeExcel
                     LogException(logFilePath, filePath, ex);
                     continue;
                 }
-                
             }
 
             // Save the destination workbook
@@ -115,7 +112,9 @@ namespace MergeExcel
 
             // Quit Excel application
             excelApp.Quit();
+            // Releases the COM object explicitly by decrementing the reference count, ensuring proper cleanup.
             Marshal.ReleaseComObject(excelApp);
+            excelApp = null;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -151,7 +150,6 @@ namespace MergeExcel
             Cursor = Cursors.Default;
             TxtBoxLoad.Text = "Chose your folder location ...";
             labelInfo.Text = "Done.";
-
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -169,43 +167,9 @@ namespace MergeExcel
             }
         }
 
-        // Start Method CloseWorkBook
-        private void CloseWorkBook()
-        {
-            if (excelWorkBook != null)
-            {
-                // Close the workbook object.
-                excelWorkBook.Close(false, paramMissing, paramMissing);
-                excelWorkBook = null;
-            }
-        }
-
-        // Start Method QuitExcel
-        private void QuitExcel()
-        {
-            // Quit Excel and release the ApplicationClass object.
-            if (excelApplication != null)
-            {
-                excelApplication.Quit();
-                excelApplication = null;
-            }
-
-            // Force garbage collection.
-            GC.Collect();
-            // Wait for all finalizers to complete before continuing.
-            // Without this call to GC.WaitForPendingFinalizers,
-            // the worker loop below might execute at the same time
-            // as the finalizers. 
-            // With this call, the worker loop executes only after
-            // all finalizers have been called.
-            GC.WaitForPendingFinalizers();
-            // Clear string array
-            XLSfiles = null;
-        }
-
+        // Go to Github repository
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            // Go to Github repository
             string url = "https://github.com/abdessalam-aadel/MergeExcel";
 
             // Open the URL in the default web browser
